@@ -367,28 +367,34 @@ def add_trimp_column(
     hr_samples['dur_min'] = (
         hr_samples['endDate'] - hr_samples['startDate']
     ).dt.total_seconds() / 60.0
-    wk_intervals = pd.IntervalIndex.from_arrays(
-        workouts['startDate'], workouts['endDate'], closed='both'
-    )
-    hr_samples['wk_idx'] = wk_intervals.get_indexer(hr_samples['startDate'])
-    hr_samples = hr_samples[hr_samples['wk_idx'] != -1]
-    avg_hr_by_wk = (
-        hr_samples
-        .groupby('wk_idx')
-        .apply(lambda g: np.average(g['value'], weights=g['dur_min']))
-        .reindex(range(len(workouts)))
-    )
-    wk = workouts.copy()
-    wk['avg_hr'] = avg_hr_by_wk
-    wk['date']   = wk['startDate'].dt.date
-    wk['hr_rest']= wk['date'].map(hr_rest_series).fillna(hr_rest_series.median())
-    wk['TRIMP']  = wk.apply(
-        lambda row: trimp_score(
-            duration_min=row['duration'],
-            hr_avg      =row['avg_hr'],
-            hr_rest     =row['hr_rest'],
-            hr_max      =hr_max_global,
-            gender      =gender),
-        axis=1
-    )
-    return wk.drop(columns='date')
+    # wk_intervals = pd.IntervalIndex.from_arrays(
+    #     workouts['startDate'], workouts['endDate'], closed='both'
+    # )
+    # # Use get_indexer_non_unique to handle overlapping intervals
+    # wk_idx, hr_idx = wk_intervals.get_indexer_non_unique(hr_samples['startDate'])
+    # # Both wk_idx and hr_idx are the same length, and correspond to the filtered heart rate samples
+    # hr_samples_filtered = hr_samples.iloc[hr_idx].copy()
+    # hr_samples_filtered = hr_samples_filtered.reset_index(drop=True)
+    # hr_samples_filtered['wk_idx'] = wk_idx
+    # hr_samples_filtered = hr_samples_filtered[hr_samples_filtered['wk_idx'] != -1]
+    # avg_hr_by_wk = (
+    #     hr_samples_filtered
+    #     .groupby('wk_idx')
+    #     .apply(lambda g: np.average(g['value'], weights=g['dur_min']) if g['dur_min'].sum() > 0 else np.nan)
+    #     .reindex(range(len(workouts)))
+    # )
+    # wk = workouts.copy()
+    # wk['avg_hr'] = avg_hr_by_wk.values
+    # wk['date']   = wk['startDate'].dt.date
+    # wk['hr_rest']= wk['date'].map(hr_rest_series).fillna(hr_rest_series.median())
+    # wk['TRIMP']  = wk.apply(
+    #     lambda row: trimp_score(
+    #         duration_min=row['duration'],
+    #         hr_avg      =row['avg_hr'],
+    #         hr_rest     =row['hr_rest'],
+    #         hr_max      =hr_max_global,
+    #         gender      =gender),
+    #     axis=1
+    # )
+    # return wk.drop(columns='date')
+    raise NotImplementedError("TRIMP calculation not working now.")
