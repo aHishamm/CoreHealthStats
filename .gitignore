@@ -6,3 +6,4 @@ healthanalytics/__pycache__
 corehealthstats_django/__pycache__
 healthanalytics/migrations/__pycache__
 healthanalytics/management/commands/__pycache__
+db.sqlite3
