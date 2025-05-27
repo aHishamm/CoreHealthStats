@@ -1,3 +1,8 @@
 src/data
 *.ipynb
 src/__pycache__
+healthanalytics/management/__pycache__
+healthanalytics/__pycache__
+corehealthstats_django/__pycache__
+healthanalytics/migrations/__pycache__
+healthanalytics/management/commands/__pycache__

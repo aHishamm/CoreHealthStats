@@ -3,3 +3,8 @@ numpy
 scikit-learn
 plotly 
 streamlit
+django>=4.2.0
+djangorestframework>=3.14.0
+django-cors-headers>=4.0.0
+python-dotenv>=1.0.0
+pillow>=10.0.0
